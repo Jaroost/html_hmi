@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICallback.cs" />
     <Compile Include="Tools\Application\ApplicationTools.cs" />
     <Compile Include="Tools\Config\ConfigTools.cs" />
     <Compile Include="Tools\Crypto\CertificatesTools.cs" />

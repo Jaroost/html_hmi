@@ -56,7 +56,7 @@ namespace WCFLib
             {
                 return baseAdress.Port;
             }
-            return -1;
+            return 8080;
         }
     }
 }

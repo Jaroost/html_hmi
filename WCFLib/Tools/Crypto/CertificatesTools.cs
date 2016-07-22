@@ -7,6 +7,7 @@ namespace WCFLib
 {
     public class CertificatesTools
     {
+
         public static X509Certificate2 CreateSelfSignedCertificate(string subjectName)
         {
             // create DN for subject and issuer

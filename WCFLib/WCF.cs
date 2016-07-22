@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using System.ServiceModel.Web;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WCFLib
@@ -16,7 +18,7 @@ namespace WCFLib
         public WCF()
         {
             CreateFolders();
-            CertificateWork();
+            WCF.CertificateWork(8701);
         }
 
         private void CreateFolders()
@@ -25,12 +27,10 @@ namespace WCFLib
             FileTools.CreateFolderIfNotExists(CERTIFIATES);
         }
 
-        public void CertificateWork()
+        public static void CertificateWork(int port)
         {
             try
             {
-                int port = ConfigTools.GetFirstBaseAddressPort();
-
                 if (Directory.GetFiles(CERTIFIATES).Length <= 0)
                 {
                     var cert = CertificatesTools.CreateSelfSignedCertificate("localhost");
@@ -79,6 +79,11 @@ namespace WCFLib
         public Stream AppFile()
         {
             return StreamFile("index.html");
+        }
+
+        public string Test()
+        {
+            return "Hello!";
         }
     }
 }
