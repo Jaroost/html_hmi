@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNet.SignalR;
+using Microsoft.Owin.Cors;
+using Microsoft.Owin.Hosting;
+using Owin;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
@@ -34,7 +38,7 @@ namespace WCFServer
             InitializeComponent();
         }
 
-        private void StartWCFServer2()
+        /*private void StartWCFServer2()
         {
             WCF.CertificateWork(8080);
             Uri baseAddress = new Uri("https://localhost:8080");
@@ -61,12 +65,20 @@ namespace WCFServer
 
             // Close the ServiceHost.
             //host.Close();
-        }
+        }*/
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             StartWCFServer1();
-            StartWCFServer2();
+            //StartWCFServer2();
+            StartSignalRServer();
+        }
+
+        private void StartSignalRServer()
+        {
+            string url = "https://*:8080";
+            WCF.CertificateWork(8080);
+            IDisposable disposable = WebApp.Start(url);
         }
 
         private void StartWCFServer1()
@@ -85,7 +97,27 @@ namespace WCFServer
         }
     }
 
-    [ServiceContract(CallbackContract = typeof(IProgressContext))]
+    class Startup
+    {
+        public void Configuration(IAppBuilder app)
+        {
+            app.UseCors(CorsOptions.AllowAll);
+            app.MapSignalR();
+        }
+    }
+
+    public class MyHub : Hub
+    {
+        public void Send(string name, string message)
+        {
+            for(int i=0; i<1000; i++)
+            {
+                Clients.All.addMessage(name, message);
+            }
+        }
+    }
+
+    /*[ServiceContract(CallbackContract = typeof(IProgressContext))]
     public interface IWebSocketsServer
     {
         [OperationContract(IsOneWay = true, Action = "*")]
@@ -117,10 +149,10 @@ namespace WCFServer
                 msgTextFromClient,
                 DateTime.Now.ToLongTimeString());
 
-            for(int i=0;i<100; i++)
+            for(int i=0;i<100000; i++)
             {
                 callback.ReportProgress(CreateMessage(msgTextToClient+i));
-                Thread.Sleep(1000);
+                Thread.Sleep(1);
             }
         }
 
@@ -137,5 +169,5 @@ namespace WCFServer
 
             return msg;
         }
-    }
+    }*/
 }
