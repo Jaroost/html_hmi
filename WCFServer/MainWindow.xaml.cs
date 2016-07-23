@@ -108,12 +108,31 @@ namespace WCFServer
 
     public class MyHub : Hub
     {
+        private static Thread clockThread=null;
+        public override Task OnConnected()
+        {
+            //string name = Context.User.Identity.Name;
+            if (clockThread == null)
+            {
+                clockThread = new Thread(Write);
+                clockThread.Start();
+            }
+
+            return base.OnConnected();
+        }
+
+        public void Write()
+        {
+            while (true)
+            {
+                Clients.All.setTime(DateTime.Now.ToString());
+                Thread.Sleep(1);
+            }
+        }
+
         public void Send(string name, string message)
         {
-            for(int i=0; i<1000; i++)
-            {
-                Clients.All.addMessage(name, message);
-            }
+            Clients.All.addMessage(name, message);
         }
     }
 
