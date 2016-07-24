@@ -108,25 +108,125 @@ namespace WCFServer
 
     public class MyHub : Hub
     {
+        private static readonly int THREAD_SLEEP_MS = 10;
+        private static Random random = new Random();
         private static Thread clockThread=null;
+        private static Thread machineThread = null;
+        private static Thread communicationThread = null;
+        private static Machine machine = null;
+  
         public override Task OnConnected()
         {
-            //string name = Context.User.Identity.Name;
             if (clockThread == null)
             {
-                clockThread = new Thread(Write);
+                clockThread = new Thread(ClockThread);
                 clockThread.Start();
+            }
+
+            if (machineThread == null)
+            {
+                machineThread = new Thread(MachineThread);
+                machineThread.Start();
+            }
+
+            if (communicationThread == null)
+            {
+                communicationThread = new Thread(CommunicationThread);
+                communicationThread.Start();
             }
 
             return base.OnConnected();
         }
 
-        public void Write()
+        public void CommunicationThread()
+        {
+            while (machine == null)
+            {
+                Thread.Sleep(THREAD_SLEEP_MS);
+            }
+            while (true)
+            {
+                Edit1Axe();
+                Thread.Sleep(THREAD_SLEEP_MS);
+            }
+        }
+
+        private void Edit1Axe()
+        {
+            int rStation = random.Next(machine.Stations.Count);
+            var station = machine.Stations[rStation];
+            if(station is UnitStation)
+            {
+                UnitStation st = (UnitStation)station;
+                int rAxe = random.Next(st.Axis.Count);
+                st.Axis[rAxe].Position = random.Next((int)st.Axis[rAxe].Minimum, (int)st.Axis[rAxe].Maximum);
+            }
+        }
+
+        public void MachineThread()
+        {
+            if (machine == null)
+            {
+                CreateMachine();
+            }
+
+            while (true)
+            {
+                Clients.All.machine(machine);
+                Thread.Sleep(THREAD_SLEEP_MS);
+            }            
+        }
+
+        private void CreateMachine()
+        {
+            var robot1 = new Robot()
+            {
+                Name = "Robot 1",
+                SerialNumber = "1010910329018309"
+            };
+            var robot2 = new Robot()
+            {
+                Name = "Robot 2",
+                SerialNumber = "109308502393482304912"
+            };
+            var loader = new LoaderStation(1)
+            {
+                Robots = new List<Robot>() { robot1, robot2 }
+            };
+
+            var unloader = new UnloaderStation(16)
+            {
+                Robots = new List<Robot>() { robot1, robot2 }
+            };
+
+            List<StationContent> list = new List<StationContent>();
+            list.Add(loader);
+
+            for (int i = 2; i < 16; i++)
+            {
+                list.Add(new UnitStation(i)
+                {
+                    Axis = new List<Axe>() {
+                            new Axe() { Name="X", Minimum=-142.232, Maximum=133.323 },
+                            new Axe() { Name="Y", Minimum=-142.232, Maximum=133.323 },
+                            new Axe() { Name="Z", Minimum=-142.232, Maximum=133.323 }
+                        }
+                });
+            }
+            list.Add(unloader);
+            machine = new Machine()
+            {
+                Type = "MTR216",
+                Stations = list
+            };
+        }
+
+        public void ClockThread()
         {
             while (true)
             {
-                Clients.All.setTime(DateTime.Now.ToString());
-                Thread.Sleep(1);
+                Clients.All.setTime(DateTime.Now.ToString("hh.mm.ss.ffffff"));
+                Thread.Sleep(THREAD_SLEEP_MS);
             }
         }
 
