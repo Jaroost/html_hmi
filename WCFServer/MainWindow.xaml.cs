@@ -189,6 +189,18 @@ namespace WCFServer
                 Name = "Robot 2",
                 SerialNumber = "109308502393482304912"
             };
+
+            var robot3 = new Robot()
+            {
+                Name = "Robot 3",
+                SerialNumber = "241234123423424234"
+            };
+
+            var robot4 = new Robot()
+            {
+                Name = "Robot 4",
+                SerialNumber = "345645654343535453345"
+            };
             var loader = new LoaderStation(1)
             {
                 Robots = new List<Robot>() { robot1, robot2 }
@@ -196,7 +208,7 @@ namespace WCFServer
 
             var unloader = new UnloaderStation(16)
             {
-                Robots = new List<Robot>() { robot1, robot2 }
+                Robots = new List<Robot>() { robot3, robot4 }
             };
 
             List<StationContent> list = new List<StationContent>();

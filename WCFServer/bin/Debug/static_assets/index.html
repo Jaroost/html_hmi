@@ -2,14 +2,6 @@
 <html>
 <head>
     <title>SignalR Simple Chat</title>
-    <style type="text/css">
-        .container {
-            background-color: #99CCFF;
-            border: thick solid #808080;
-            padding: 20px;
-            margin: 20px;
-        }
-    </style>
 	<meta charset="UTF-8">
 	    <!--Script references. -->
     <!--Reference the jQuery library. -->
@@ -79,9 +71,11 @@
 		</div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
 	</nav>
-    <div class="container">
-	<div id="time"></div>
+    
 	<div id="machine_container"></div>
+	<div id="time_container"></div>
+	<div class="container">
+	<div id="time"></div>
 	<div id="machine"></div>
         <input type="text" id="message" />
         <input type="button" id="sendmessage" value="Send" />
@@ -90,16 +84,17 @@
     </div>
 	
 	<script type="text/babel" src="static/machine.js"></script>
+	<script type="text/babel" src="static/current_time.js"></script>
 
 	
     <!--Add script to update the page and send messages.-->
     <script type="text/javascript">
         $(function () {
-        //Set the hubs URL for the connection
+		
+			/*//Set the hubs URL for the connection
             $.connection.hub.url = "https://192.168.178.21:8080/signalr";
             // Declare a proxy to reference the hub.
             var chat = $.connection.myHub;
-            
             // Create a function that the hub can call to broadcast messages.
             chat.client.addMessage = function (name, message) {
                 // Html encode display name and message.
@@ -130,7 +125,16 @@
                     // Clear text box and reset focus for next comment.
                     $('#message').val('').focus();
                 });
-            });
+            });*/
+			/*$.connection.hub.url = "https://192.168.178.21:8080/signalr";
+			var chat=$.connection.myHub;
+			//this.chat = $.connection.myHub;
+			chat.client.machine=function(machine){
+				$('#machine').html(JSON.stringify(machine, null, 2));
+			}
+			$.connection.hub.start().done(function(){
+				alert('ici');
+			});*/
         });
     </script>
 </body>

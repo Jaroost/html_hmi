@@ -35,6 +35,23 @@ namespace WCFServer
 
     public class Axe
     {
+        static int GLOBAL_ID = 0;
+        private string key=string.Empty;
+        public string Key {
+            get
+            {
+                if (key.Equals(string.Empty))
+                {
+                    key = GLOBAL_ID + "";
+                    GLOBAL_ID++;
+                }
+                return key;
+            }
+            set
+            {
+                key = value;
+            }
+        }
         public string Name { get; set; }
         public double Minimum { get; set; }
         public double Maximum { get; set; }
@@ -62,6 +79,24 @@ namespace WCFServer
 
     public class Robot
     {
+        static int GLOBAL_ID = 0;
+        private string key = string.Empty;
+        public string Key
+        {
+            get
+            {
+                if (key.Equals(string.Empty))
+                {
+                    key = GLOBAL_ID + "";
+                    GLOBAL_ID++;
+                }
+                return key;
+            }
+            set
+            {
+                key = value;
+            }
+        }
         public string SerialNumber { get; set; }
         public string Name { get; set; }
     }
