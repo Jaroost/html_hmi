@@ -108,7 +108,7 @@ namespace WCFServer
 
     public class MyHub : Hub
     {
-        private static readonly int THREAD_SLEEP_MS = 10;
+        private static readonly int THREAD_SLEEP_MS = 200;
         private static Random random = new Random();
         private static Thread clockThread=null;
         private static Thread machineThread = null;
@@ -206,15 +206,12 @@ namespace WCFServer
                 Robots = new List<Robot>() { robot1, robot2 }
             };
 
-            var unloader = new UnloaderStation(16)
-            {
-                Robots = new List<Robot>() { robot3, robot4 }
-            };
+            
 
             List<StationContent> list = new List<StationContent>();
             list.Add(loader);
 
-            for (int i = 2; i < 16; i++)
+            for (int i = 2; i < 20; i++)
             {
                 list.Add(new UnitStation(i)
                 {
@@ -225,6 +222,10 @@ namespace WCFServer
                         }
                 });
             }
+            var unloader = new UnloaderStation(list.Count+1)
+            {
+                Robots = new List<Robot>() { robot3, robot4 }
+            };
             list.Add(unloader);
             machine = new Machine()
             {

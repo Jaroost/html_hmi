@@ -44,13 +44,13 @@
 		return this.state.machine.Stations.map((station)=>{
 			switch(station.Type){
 				case "Unit":
-					return (<div className="col-xs-2"><UnitStation {...station} key={station.Num} /></div>);
+					return (<UnitStation {...station} key={station.Num} />);
 				case "Loader":
-					return (<div className="col-xs-2"><LoaderStation {...station} key={station.Num} /></div>);
+					return (<LoaderStation {...station} key={station.Num} />);
 				case "Unloader":
-					return (<div className="col-xs-2"><UnloaderStation {...station} key={station.Num} /></div>);
+					return (<UnloaderStation {...station} key={station.Num} />);
 				default:
-					return (<div className="col-xs-2"><UnitStation {...station} key={station.Num} /></div>);
+					return (<UnitStation {...station} key={station.Num} />);
 			}
 			//const StationType=`${station.Type}Station`;
 			//return (<StationType {...station} key={station.Num} />);
@@ -62,20 +62,23 @@ class UnitStation extends React.Component{
 	render(){
 		const axis=this._getAxis();
 		return (
-			<div className="well">
-				Unit N° {this.props.Num}<br/>
-				Axis:
-				<ul>
-				{axis}
-				</ul>
-			</div>		
+			<div className="col-xs-2">
+				<div className="well">
+					Unit N° {this.props.Num}<br/>
+					Axis:
+					<ul>
+					{axis}
+					</ul>
+				</div>
+			</div>
 		);
 	}
 	
 	_getAxis(){
 		let num=this.props.Num;
 		return this.props.Axis.map((axe)=>{
-			return (<li><Axe {...axe} key={axe.Key}/></li>)
+			
+			return (<Axe {...axe} key={axe.Name+num}/>)
 		})
 	}
 	
@@ -85,20 +88,22 @@ class LoaderStation extends React.Component{
 	render(){
 		const robots=this._getRobots();
 		return (
-			<div className="well">
-				Loader N° {this.props.Num}<br/>
-				Robots:
-				<ul>
-				{robots}
-				</ul>
-			</div>				
+			<div className="col-xs-2">
+				<div className="well">
+					Loader N° {this.props.Num}<br/>
+					Robots:
+					<ul>
+						{robots}
+					</ul>
+				</div>	
+			</div>
 		);
 	}
 	
 	_getRobots(){
 		let num=this.props.Num;
 		return this.props.Robots.map((robot)=>{
-			return (<li><Robot {...robot} key={robot.Key}/></li>)
+			return (<Robot {...robot} key={robot.Key}/>);
 		})
 	}
 }
@@ -107,20 +112,19 @@ class UnloaderStation extends React.Component{
 	render(){
 		const robots=this._getRobots();
 		return (
+		<div className="col-xs-2">
 			<div className="well">
 				Unloader N° {this.props.Num}<br/>
 				Robots:
-				<ul>
-				{robots}
-				</ul>
-			</div>				
+			</div>	
+		</div>
 		);
 	}
 	
 	_getRobots(){
 		let num=this.props.Num;
 		return this.props.Robots.map((robot)=>{
-			return (<li><Robot {...robot} key={robot.Key}/></li>)
+			return (<Robot {...robot} key={robot.Key}/>);
 		})
 	}
 }
@@ -147,16 +151,33 @@ class Station extends React.Component{
 
 class Axe extends React.Component{
 	render(){
-		return (
-			<div>Axe: {this.props.Name}<br/>Minimum: {this.props.Minimum}<br/>Maximum: {this.props.Maximum}<br/>Position: {this.props.Position}</div>		
-		);
+		if (this.props.Position>0){
+			return (
+				<li>
+					<p>Axe: {this.props.Name}</p>
+					<p>Minimum: {this.props.Minimum}</p>
+					<p>Maximum: {this.props.Maximum}</p>
+					<p className="good">Position: {this.props.Position}</p>
+				</li>
+			);
+		}else{
+			return (
+				<li>
+					<p>Axe: {this.props.Name}</p>
+					<p>Minimum: {this.props.Minimum}</p>
+					<p>Maximum: {this.props.Maximum}</p>
+					<p className="bad">Position: {this.props.Position}</p>
+				</li>
+			);
+		}
+		
 	}
 }
 
 class Robot extends React.Component{
 	render(){
 		return (
-			<div>Robot: {this.props.Name}<br/>Serial: {this.props.SerialNumber}</div>		
+			<li><div>Robot: {this.props.Name}<br/>Serial: {this.props.SerialNumber}</div></li>
 		);
 	}
 }
