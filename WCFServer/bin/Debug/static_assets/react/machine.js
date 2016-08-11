@@ -61,17 +61,33 @@
 class UnitStation extends React.Component{
 	render(){
 		const axis=this._getAxis();
-		return (
-			<div className="col-xs-2">
-				<div className="well">
-					Unit N° {this.props.Num}<br/>
-					Axis:
-					<ul>
-					{axis}
-					</ul>
+		const isPos=this._getIsPositive();
+		if(isPos){
+			return (
+				<div className="col-xs-2">
+					<div className="well goodb">
+						Unit N° {this.props.Num}<br/>
+						Axis:
+						<ul>
+						{axis}
+						</ul>
+					</div>
 				</div>
-			</div>
-		);
+			);
+		}else{
+			return (
+				<div className="col-xs-2">
+					<div className="well badb">
+						Unit N° {this.props.Num}<br/>
+						Axis:
+						<ul>
+						{axis}
+						</ul>
+					</div>
+				</div>
+			);
+		}
+		
 	}
 	
 	_getAxis(){
@@ -80,6 +96,14 @@ class UnitStation extends React.Component{
 			
 			return (<Axe {...axe} key={axe.Name+num}/>)
 		})
+	}
+	
+	_getIsPositive(){
+		var isPositive=true;
+		$.each(this.props.Axis, function(index, axis){
+			isPositive &=axis.Position>0;
+		});
+		return isPositive;
 	}
 	
 }

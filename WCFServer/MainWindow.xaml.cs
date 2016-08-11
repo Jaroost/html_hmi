@@ -108,7 +108,7 @@ namespace WCFServer
 
     public class MyHub : Hub
     {
-        private static readonly int THREAD_SLEEP_MS = 200;
+        private static readonly int THREAD_SLEEP_MS = 50;
         private static Random random = new Random();
         private static Thread clockThread=null;
         private static Thread machineThread = null;
