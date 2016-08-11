@@ -211,7 +211,7 @@ namespace WCFServer
             List<StationContent> list = new List<StationContent>();
             list.Add(loader);
 
-            for (int i = 2; i < 20; i++)
+            for (int i = 2; i < 35; i++)
             {
                 list.Add(new UnitStation(i)
                 {

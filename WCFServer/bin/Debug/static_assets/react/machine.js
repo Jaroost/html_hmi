@@ -61,8 +61,9 @@
 class UnitStation extends React.Component{
 	render(){
 		const axis=this._getAxis();
-		const isPos=this._getIsPositive();
-		if(isPos){
+		const posCount=this._getPostivesCount();
+		const negCount=this._getNegativesCount();
+		if(posCount>negCount){
 			return (
 				<div className="col-xs-2">
 					<div className="well goodb">
@@ -98,12 +99,24 @@ class UnitStation extends React.Component{
 		})
 	}
 	
-	_getIsPositive(){
-		var isPositive=true;
+	_getNegativesCount(){
+		var negs=0;
 		$.each(this.props.Axis, function(index, axis){
-			isPositive &=axis.Position>0;
+			if(axis.Position < 0){
+				negs++;
+			}
 		});
-		return isPositive;
+		return negs;
+	}
+	
+	_getPostivesCount(){
+		var pos=0;
+		$.each(this.props.Axis, function(index, axis){
+			if(axis.Position > 0){
+				pos++;
+			}
+		});
+		return pos;
 	}
 	
 }
